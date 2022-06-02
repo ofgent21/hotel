@@ -76,14 +76,18 @@ public class Hotel {
 								System.out.println("Digite S ou N");
 							}
 						}
-						System.out.println("Quarto Vinculado: ");
-						clienteQuarto = in.next();
+						// System.out.println("Quarto Vinculado: ");
+						clienteQuarto = "0";
 						clienteStatus = "N";
-
-						Clientes_Config registro1 = new Clientes_Config(clienteCodigo, clienteNome,
-								clienteDataNascimento, clienteEmail, clienteTelefone, clienteCidade, clienteUF,
-								clienteFumante, clienteStatus, clienteQuarto);
-						clientes.add(registro1);
+						System.out.println("Confirma a inclusão? S ou N : ");
+						String confirmaInclusaoDoCliente = in.next();
+						if (confirmaInclusaoDoCliente.equals("S")) {
+							Clientes_Config registro1 = new Clientes_Config(clienteCodigo, clienteNome,
+									clienteDataNascimento, clienteEmail, clienteTelefone, clienteCidade, clienteUF,
+									clienteFumante, clienteStatus, clienteQuarto);
+							clientes.add(registro1);
+							System.out.println("CLIENTE REGISTRADO COM SUCESSO....... ");
+						}
 						codCadastroAtual++;
 						Tela.l2();
 					} /////// FIM WHILE CADASTRO
@@ -123,17 +127,21 @@ public class Hotel {
 							System.out.println(ucodTemp);
 							Tela.l2();
 							System.out.println("===== SELECIONE SUA OPÇÃO DE EDIÇÃO DO CADASTRO =======");
-							System.out.println(" 1 - Nome do Cliente");
-							System.out.println(" 2 - Data de Nascimento do Cliente");
-							System.out.println(" 3 - Email do Cliente");
-							System.out.println(" 4 - Telefone do Cliente");
-							System.out.println(" 5 - Cidade do Cliente");
-							System.out.println(" 6 - UF do Cliente");
-							System.out.println(" 7 - Fumante s/n");
-							System.out.println(" 8 - Status Ativo/Inativo");
-							System.out.println(" 9 - Quarto Vinculado");
-							System.out.println("99 - EXCLUIR O CLIENTE");
-							System.out.println(" 0 - Sair sem alterar");
+							System.out.println("  1 - Nome do Cliente");
+							System.out.println("  2 - Data de Nascimento do Cliente");
+							System.out.println("  3 - Email do Cliente");
+							System.out.println("  4 - Telefone do Cliente");
+							System.out.println("  5 - Cidade do Cliente");
+							System.out.println("  6 - UF do Cliente");
+							System.out.println("  7 - Fumante s/n");
+							System.out.println("  8 - Status Ativo/Inativo");
+							Tela.l2();
+							System.out.println("  9 - CHECK IN ");
+							System.out.println(" 10 - CHECK OUT ");
+							Tela.l1();
+							System.out.println(" 99 - EXCLUIR O CLIENTE");
+							Tela.l1();
+							System.out.println("  0 - Sair sem alterar");
 							int opAlt = in.nextInt();
 							in.nextLine();
 							switch (opAlt) {
@@ -241,8 +249,19 @@ public class Hotel {
 								Tela.l2();
 								System.out.println("===== MODO ALTERAÇÃO DE STATUS FUMANTE (S/N) DO CLIENTE ==");
 								System.out.println("Status Atual do Cliente. Fumante? " + ucodTemp.getClienteFumante());
-								System.out.print("Informe o Novo Status do Cliente. Fumante: ");
-								String novoFumante = in.next();
+								int confirmaFumante = 0;
+								String novoFumante = "";
+								while (confirmaFumante == 0) {
+									System.out.print("Informe o Novo Status do Cliente. Fumante: ");
+									novoFumante = in.next();
+									in.nextLine();
+									if (novoFumante.equals("S") || (novoFumante.equals("N"))) {
+										confirmaFumante = 1;
+
+									} else {
+										System.out.println("Digite S ou N para prosseguir");
+									}
+								}
 								Tela.l2();
 								Tela.mok();
 								System.out.println("=== CONFIRMA A ALTERAÇÃO: 1 - Sim   2 - Não");
@@ -281,7 +300,7 @@ public class Hotel {
 							case 9: {
 								String FUMA = ucodTemp.getClienteFumante();
 								Tela.l2();
-								System.out.println("=== MODO DE EDIÇÃO DE VÍNCULO DE QUARTO AO CLIENTE ==== ");
+								System.out.println("=== MODO CHEK IN (VÍNCULO DE QUARTO AO CLIENTE) ==== ");
 								Tela.l0();
 								System.out.print("Quarto Atual Vinculado ao Cliente: ");
 								System.out.println(ucodTemp.getClienteQuarto());
@@ -297,7 +316,7 @@ public class Hotel {
 
 									int qtsqok = 0;
 
-									System.out.println("=== QUARTOS LOCALIZADOS PARA FUMANTE OPÇÃO " + FUMA);
+									System.out.println("=== QUARTOS LOCALIZADOS PARA O CLIENTE INFORMADO... ");
 									for (int contaquarto = 0; contaquarto < quartos.size(); contaquarto++) {
 										Quartos_Config fumante = quartos.get(contaquarto);
 
@@ -313,8 +332,10 @@ public class Hotel {
 
 									}
 									if (qtsqok < 1) {
-										System.out.println("==== NÃO EXISTEM QUARTOS PARA OPÇÃO FUMANTE " + FUMA);
-
+										Tela.l1();
+										System.out.println(
+												"==== NÃO EXISTEM QUARTOS DISPONIVEIS PARA O CLIENTE INFORMADO.....  ");
+										Tela.l1();
 										break;
 									}
 									Tela.l0();
@@ -332,9 +353,7 @@ public class Hotel {
 													&& Integer.parseInt(fumante1.getQuartoQtdePessoas()) >= qtspessoas
 													&& novoQuarto.equals(fumante1.getQuartoNumero())) {
 												fumante1.setQuartoStatus("N");
-												fumante1.setQuartoQtdePessoas(Integer.toString(qtspessoas) + " de  "
-														+ fumante1.getQuartoQtdePessoas());
-												fumante1.setQuartoChekIn("ENTRADADATADEHOJE");
+												fumante1.setQuartoChekIn(Integer.toString(qtspessoas)+ " hospedadas");
 												fumante1.setQuartoCodCliente(codTemp);
 
 											}
@@ -347,6 +366,49 @@ public class Hotel {
 								break;
 
 							}
+
+							case 10: {
+								// inicio do Check OUT
+								Tela.l2();
+								System.out.println(" MODO CHECK OUT - Desvincular Quarto para o Cliente ");
+								Tela.l2();
+								for (int contadorFecha = 0; contadorFecha < quartos.size(); contadorFecha++) {
+									Quartos_Config fechaQuarto = quartos.get(contadorFecha);
+									if (codTemp.equals(fechaQuarto.getQuartoCodCliente())) {
+										System.out.println("Localizado Registro de Quarto "
+												+ fechaQuarto.getQuartoCodCliente() + " para o Cliente Informado.");
+										Tela.l2();
+										Tela.l0();
+										Tela.l0();
+										Tela.l0();
+										System.out.println(" DESVINCULA QUARTO ? S ou N ");
+										String confirmaCheckOut = in.next();
+										if (confirmaCheckOut.equals("S"))
+											;
+										fechaQuarto.setQuartoCodCliente("0");
+										fechaQuarto.setQuartoStatus("S");
+										fechaQuarto.setQuartoChekIn("0");
+										
+
+										for (int contadorFechaCliente = 0; contadorFechaCliente < clientes
+												.size(); contadorFechaCliente++) {
+											Clientes_Config clienteOut = clientes.get(contadorFechaCliente);
+											if (codTemp.equals(clienteOut.getCodCliente())) {
+												clienteOut.setClienteQuarto("");
+												System.out.println("Sucesso. Registro Cliente Atualizado com Check Out..... ");
+											}
+										}
+
+										System.out.println(" Sucesso. Registro de Quarto Atualizado com Check Out.....  ");
+
+									}
+
+								}
+
+								// FIM do Check OUT
+								break;
+							}
+
 							case 99: {
 
 								Tela.l2();
@@ -448,6 +510,216 @@ public class Hotel {
 					break;
 				} // FIM CASE 5
 				case 6: {
+
+					Tela.l2();
+					System.out.println("====== QUARTOS EDIÇÃO E ALTERAÇÃO ==================== ");
+					Tela.l1();
+					System.out.println("Insira o Número do Quarto: ");
+					String codQuartoTemp = in.next();
+					for (int i = 0; i < quartos.size(); i++) {
+						Quartos_Config tempCodQua = quartos.get(i);
+						if (codQuartoTemp.equals(tempCodQua.getQuartoNumero()))
+							;
+						{
+							int indQuartoAlterar = i;
+							Tela.l2();
+							System.out.println("=======  Quarto LOCALIZADO na posição: " + indQuartoAlterar);
+							System.out.println(tempCodQua);
+							Tela.l2();
+							System.out.println("=== Qual o registro a ser alterado? ======= ");
+							System.out.println("  1 - Posição");
+							System.out.println("  2 - Fumante S/N");
+							System.out.println("  3 - Valor da diária");
+							System.out.println("  4 - Quantidade de Camas");
+							System.out.println("  5 - Quantidade de Pessoas");
+							// System.out.println(" 6 - Chek In");
+							// System.out.println(" 7 - Chek Out");
+							// System.out.println(" 8 - Status do Quarto");
+							System.out.println("  9 - Vínculo Cliente");
+							System.out.println(" 99 - EXCLUIR O QUARTO");
+							System.out.println("  0 - Sair sem alterar");
+							int opAltQua = in.nextInt();
+
+							switch (opAltQua) {
+
+							case 1: {
+								Tela.l2();
+								System.out.println("========== Posição ========== ");
+								System.out.println(tempCodQua.getQuartoPosicao());
+								System.out.println("INFORME O NOVO VALOR: ");
+								Tela.l2();
+								String novaPosicao = in.next();
+								System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								int opQuaConfirma = in.nextInt();
+								if (opQuaConfirma == 1) {
+									tempCodQua.setQuartoPosicao(novaPosicao);
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 2: {
+								Tela.l2();
+								System.out.println("========== Fumante S/N ========== ");
+								System.out.println("Status atual do Quarto: " + tempCodQua.getQuartoFumante());
+								int confirmaFumanteQuarto = 0;
+								String novoFumante = "";
+								while (confirmaFumanteQuarto == 0) {
+									System.out.println("INFORME O NOVO STATUS (S) OU (N): ");
+									Tela.l2();
+									novoFumante = in.next();
+									if (novoFumante.equals("S") || novoFumante.equals("N")) {
+										confirmaFumanteQuarto = 1;
+									} else {
+										System.out.println("Insira S ou N para fumante ....");
+									}
+
+								}
+								System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								int opQuaConfirma = in.nextInt();
+								if (opQuaConfirma == 1) {
+									tempCodQua.setQuartoFumante(novoFumante);
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 3: {
+								Tela.l2();
+								System.out.println("========== Valor da diária ========== ");
+								System.out.println(tempCodQua.getQuartoValorDiaria());
+								System.out.println("INFORME O NOVO VALOR: ");
+								Tela.l2();
+								String novaDiaria = in.next();
+								System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								int opQuaConfirma = in.nextInt();
+								if (opQuaConfirma == 1) {
+									tempCodQua.setQuartoValorDiaria(novaDiaria);
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 4: {
+								Tela.l2();
+								System.out.println("========== Quantidade de Camas ========== ");
+								System.out.println(tempCodQua.getQuartoQtdeCamas());
+								System.out.println("INFORME O NOVO VALOR: ");
+								Tela.l2();
+								String novaCamas = in.next();
+								System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								int opQuaConfirma = in.nextInt();
+								if (opQuaConfirma == 1) {
+									tempCodQua.setQuartoQtdeCamas(novaCamas);
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 5: {
+								Tela.l2();
+								System.out.println("========== Quantidade de Pessoas ========== ");
+								System.out.println(tempCodQua.getQuartoQtdePessoas());
+								System.out.println("INFORME O NOVO VALOR: ");
+								Tela.l2();
+								String novaQPessoas = in.next();
+								System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								int opQuaConfirma = in.nextInt();
+								if (opQuaConfirma == 1) {
+									tempCodQua.setQuartoQtdePessoas(novaQPessoas);
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 6: {
+								/*
+								 * Tela.l2(); System.out.println("========== Check In ========== ");
+								 * System.out.println(tempCodQua.getQuartoChekIn());
+								 * System.out.println("INFORME O NOVO VALOR: "); Tela.l2(); String novoCKin =
+								 * in.next();
+								 * System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								 * int opQuaConfirma = in.nextInt(); if (opQuaConfirma == 1) {
+								 * tempCodQua.setQuartoChekIn(novoCKin); Tela.mok(); }
+								 */
+								break;
+							}
+
+							case 7: {
+								/*
+								 * Tela.l2(); System.out.println("========== Check Out ========== ");
+								 * System.out.println(tempCodQua.getQuartoChekOut());
+								 * System.out.println("INFORME O NOVO VALOR: "); Tela.l2(); String novoCKout =
+								 * in.next();
+								 * System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								 * int opQuaConfirma = in.nextInt(); if (opQuaConfirma == 1) {
+								 * tempCodQua.setQuartoChekOut(novoCKout); Tela.mok(); }
+								 */
+								break;
+							}
+
+							case 8: {
+								/*
+								 * Tela.l2(); System.out.println("========== Status do Quarto ========== ");
+								 * System.out.println(tempCodQua.getQuartoStatus());
+								 * System.out.println("INFORME O NOVO VALOR: "); Tela.l2(); String novoSta =
+								 * in.next();
+								 * System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								 * int opQuaConfirma = in.nextInt(); if (opQuaConfirma == 1) {
+								 * tempCodQua.setQuartoStatus(novoSta); Tela.mok(); }
+								 */
+								break;
+							}
+
+							case 9: {
+								Tela.l2();
+								System.out.println("========== Vínculo Cliente ========== ");
+								System.out.println(tempCodQua.getQuartoCodCliente());
+								System.out.println("INFORME O NOVO VALOR: ");
+								Tela.l2();
+								String novCodCliente = in.next();
+								System.out.println("===== CONFIRMA A ALTERAÇÃO:   1- Sim   2- Não ======= ");
+								int opQuaConfirma = in.nextInt();
+								if (opQuaConfirma == 1) {
+									tempCodQua.setQuartoCodCliente(novCodCliente);
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 99: {
+								Tela.l2();
+								System.out.println("========== EXCLUIR O QUARTO ========== ");
+								Tela.l2();
+								System.out.println("====   ATENÇÃO  ====== MODO EXCLUSÃO =======");
+								Tela.l1();
+								Tela.l1();
+								System.out.println("Tem certeza : 999 - SIM   Qualquer tecla - NÃO");
+
+								int excluiQuarto = in.nextInt();
+
+								if (excluiQuarto == 999) {
+									quartos.remove(i);
+									Tela.l2();
+									Tela.mok();
+								}
+								break;
+							}
+
+							case 0: {
+								Tela.l2();
+								System.out.println("========== Sair sem alterar ========== ");
+								break;
+							}
+
+							}
+
+						} //// if encontra o número do quarto
+
+					}
+
+					vez = 0;
+
 					break;
 				} // FIM CASE 6
 				case 7: {

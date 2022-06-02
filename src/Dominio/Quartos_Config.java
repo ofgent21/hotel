@@ -19,7 +19,7 @@ public class Quartos_Config {
 		public String toString() {
 			return " Quarto Número: " + quartoNumero + " Liberado?: " + quartoStatus + "\n Posicao: " + quartoPosicao
 					+ "  Fumante S/N: " + quartoFumante + "\n Qtde Camas: " + quartoQtdeCamas + "  Qtde Pessoas: "
-					+ quartoQtdePessoas + "\n Check In: " + quartoChekIn + "  Check Out: " + quartoChekOut
+					+ quartoQtdePessoas + "\n Pessoas no Quarto Atualmente:  " + quartoChekIn + "  Check Out: " + quartoChekOut
 					+ "\n Cliente: " + quartoCodCliente + "  Valor Diária: " + quartoValorDiaria ;
 		}
 
